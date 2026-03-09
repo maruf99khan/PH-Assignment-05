@@ -27,7 +27,7 @@
     />
   </head>
   <body class="bg-[#F8FAFC] min-h-screen">
-    <section id="login-page" class="flex justify-center mx-auto py-16 hidden">
+    <section id="login-page" class="flex justify-center mx-auto py-16">
       <div class="bg-white w-[420px] rounded-xl shadow-md p-8 text-center">
         <!-- GitHub Icon -->
         <div class="flex justify-center">
@@ -88,80 +88,90 @@
       </div>
     </section>
 
-    <section
-      class="main-page flex justify-between px-[20px] sm:px-[100px] py-2 sm:py-6 mb-8"
-    >
-      <div class="flex justify-around gap-3 items-center">
-        <i class="fa-brands fa-github text-3xl"></i>
-        <h1 class="font-semibold">GitHub Issues Tracker</h1>
-      </div>
-
-      <div class="relative flex justify-between gap-3">
-        <i
-          class="fa-solid fa-magnifying-glass absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"
-        ></i>
-
-        <input id="search"
-          type="text"
-          placeholder="Search issues..."
-          class="w-auto pl-10 pr-4 py-3 bg-white border rounded-lg outline-none"
-        />
-        <button class="text-white bg-[#4A00FF] p-3 rounded-md">
-          <i class="fa-solid fa-plus bg-transparent mr-1"></i>
-          New Issue
-        </button>
-      </div>
-    </section>
-
-    <section
-      id="tabs"
-      class="mx-5 sm:mx-[240px] h-auto flex justify-start gap-7 rounded-lg p-4 shadow-md mb-4"
-    >
-      <button status="active"
-        class="buttons border-2 rounded-md py-2 px-8 bg-[#4A00FF] text-white"
+    <section id="rest" class="hidden">
+      <section
+        class="main-page flex justify-between px-[20px] sm:px-[100px] py-2 sm:py-6 mb-8"
       >
-        All
-      </button>
-      <button status="inactive" class="buttons border-2 rounded-md py-2 px-6">Open</button>
-      <button status="inactive" class="buttons border-2 rounded-md py-2 px-6">Closed</button>
-    </section>
-
-    <section
-      class="mx-5 sm:mx-[240px] h-auto gap-7 rounded-t-lg p-4 shadow-md flex justify-between"
-    >
-      <div class="flex justify-center gap-3 items-center">
-        <img class="h-11 w-11 text-center" src="./assets/Aperture.png" alt="" />
-        <div>
-          <h1 class="text-[20px] font-semibold">
-            <span id="total-count">0</span> Issues
-          </h1>
-          <p class="text-gray-500 text-[12px]">
-            Track and manage your project issues
-          </p>
+        <div class="flex justify-around gap-3 items-center">
+          <i class="fa-brands fa-github text-3xl"></i>
+          <h1 class="font-semibold">GitHub Issues Tracker</h1>
         </div>
-      </div>
-      <div class="flex justify-between gap-3 items-center text-center">
-        <div class="rounded-full bg-green-600 h-4 w-4"></div>
-        <div>Open</div>
-        <div class="rounded-full bg-violet-600 h-4 w-4"></div>
-        <div>Closed</div>
-      </div>
+
+        <div class="relative flex justify-between gap-3">
+          <i
+            class="fa-solid fa-magnifying-glass absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"
+          ></i>
+
+          <input
+            id="search"
+            type="text"
+            placeholder="Search issues..."
+            class="w-auto pl-10 pr-4 py-3 bg-white border rounded-lg outline-none"
+          />
+          <button class="text-white bg-[#4A00FF] p-3 rounded-md">
+            <i class="fa-solid fa-plus bg-transparent mr-1"></i>
+            New Issue
+          </button>
+        </div>
+      </section>
+
+      <section
+        id="tabs"
+        class="mx-5 sm:mx-[240px] h-auto flex justify-start gap-7 rounded-lg p-4 shadow-md mb-4"
+      >
+        <button
+          status="active"
+          class="buttons border-2 rounded-md py-2 px-8 bg-[#4A00FF] text-white"
+        >
+          All
+        </button>
+        <button status="inactive" class="buttons border-2 rounded-md py-2 px-6">
+          Open
+        </button>
+        <button status="inactive" class="buttons border-2 rounded-md py-2 px-6">
+          Closed
+        </button>
+      </section>
+
+      <section
+        class="mx-5 sm:mx-[240px] h-auto gap-7 rounded-t-lg p-4 shadow-md flex justify-between"
+      >
+        <div class="flex justify-center gap-3 items-center">
+          <img
+            class="h-11 w-11 text-center"
+            src="./assets/Aperture.png"
+            alt=""
+          />
+          <div>
+            <h1 class="text-[20px] font-semibold">
+              <span id="total-count">0</span> Issues
+            </h1>
+            <p class="text-gray-500 text-[12px]">
+              Track and manage your project issues
+            </p>
+          </div>
+        </div>
+        <div class="flex justify-between gap-3 items-center text-center">
+          <div class="rounded-full bg-green-600 h-4 w-4"></div>
+          <div>Open</div>
+          <div class="rounded-full bg-violet-600 h-4 w-4"></div>
+          <div>Closed</div>
+        </div>
+      </section>
+
+      <!-- loader -->
+      <div id="loader" class="spinner"></div>
+
+      <!-- individual issue -->
+
+      <section id="focused-issue" class="hidden"></section>
+
+      <!--all issues -->
+      <section
+        id="issues"
+        class="mx-5 sm:mx-[240px] h-auto gap-2 rounded-b-lg p-4 shadow-md bg-[#F8FAFC] grid grid-cols-2 sm:grid-cols-4"
+      ></section>
     </section>
-
-    <!-- loader -->
-    <div id="loader" class="spinner"></div>
-
-    <!-- individual issue -->
-
-    <section id="focused-issue" class="hidden">
-      
-    </section>
-
-    <!--all issues -->
-    <section
-      id="issues"
-      class="mx-5 sm:mx-[240px] h-auto gap-2 rounded-b-lg p-4 shadow-md bg-[#F8FAFC] grid grid-cols-2 sm:grid-cols-4"
-    ></section>
 
     <script src="script.js"></script>
   </body>

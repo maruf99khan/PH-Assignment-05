@@ -4,7 +4,7 @@ let globalIssues = [];
 
 const signInButton = document.getElementById("sign-in-button");
 const loginPage = document.getElementById("login-page");
-const mainPage = document.getElementById("main-page");
+const mainPage = document.getElementById("rest");
 
 let currentTab = "All";
 signInButton.addEventListener("click", () => {
