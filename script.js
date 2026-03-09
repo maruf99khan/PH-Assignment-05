@@ -123,13 +123,14 @@ const displayIssues = (issues) => {
 
         <div class="border-t border-gray-100 p-4 bg-slate-50/50">
           <p class="text-slate-500 text-xs font-medium">#${issue.id} by ${issue.author}</p>
-          <p class="text-slate-400 text-[11px]">${issue.createdAt.split('T')[0]}</p>
+          <p class="text-slate-400 text-[11px]">${issue.createdAt.split("T")[0]}</p>
         </div>
       </div>
         `;
   }
   document.getElementById("total-count").innerText = count;
   showIndividual(issues);
+  search(issues);
 };
 
 function getPriority(x) {
@@ -165,14 +166,13 @@ function getLabels(labels) {
 // show individual issue
 
 function showIndividual(issues) {
-  const fetchIssue = [...issues];
-  const allIssues = document.querySelectorAll(".issues");
-
-  for (let i = 0; i < 50; i++) {
-    allIssues[i].addEventListener("click", () => {
-      document.getElementById("focused-issue").classList.remove("hidden");
-      document.getElementById("focused-issue").innerHTML = "";
-      document.getElementById("focused-issue").innerHTML = `<div 
+  let temp = document.querySelectorAll('#focused-issue>div');
+  document.getElementById('issues').addEventListener('click', (event) => {
+    const parent = event.target.parentElement.parentElement;
+    
+    for(let issue of issues){
+      if(issue.title === parent.querySelector('h2').innerText){
+        document.getElementById('focused-issue').innerHTML = `<div 
         class="flex items-center justify-center min-h-screen bg-gray-500 bg-opacity-80 p-6 fixed z-50 inset-0"
       >
         <div
@@ -180,33 +180,31 @@ function showIndividual(issues) {
         >
           <div>
             <h1 class="text-3xl font-bold text-slate-900">
-              ${fetchIssue[i].title}
+              ${issue.title}
             </h1>
             <div class="flex items-center gap-2 mt-2 text-slate-500 text-sm">
               <span
                 class="${
-                  fetchIssue[i].status === "open"
-                    ? "bg-emerald-500"
-                    : "bg-violet-500"
+                  issue.status === "open" ? "bg-emerald-500" : "bg-violet-500"
                 } text-white px-3 py-1 rounded-full font-semibold flex items-center gap-1.5"
               >
-                ${fetchIssue[i].status}
+                ${issue.status}
               </span>
               <span>•</span>
-              <span>Opened by ${fetchIssue[i].author}</span>
+              <span>Opened by ${issue.author}</span>
               <span>•</span>
-              <span>${fetchIssue[i].createdAt.split('T')[0]}</span>
+              <span>${issue.createdAt.split("T")[0]}</span>
             </div>
           </div>
-
+ 
           <div class="flex gap-2">
-            ${getLabels(fetchIssue[i].labels)}
+            ${getLabels(issue.labels)}
           </div>
-
+ 
           <p class="text-slate-600 leading-relaxed text-lg">
-            ${fetchIssue[i].description}
+            ${issue.description}
           </p>
-
+ 
           <div
             class="flex flex-col sm:flex-row justify-between items-end gap-4 mt-2"
           >
@@ -215,25 +213,50 @@ function showIndividual(issues) {
             >
               <div class="flex flex-col gap-1">
                 <span class="text-slate-400 text-sm">Assignee:</span>
-                <span class="font-bold text-slate-800">${fetchIssue[i].assignee === ""? 'none' : fetchIssue[i].assignee}</span>
+                <span class="font-bold text-slate-800">${issue.assignee === "" ? "none" : issue.assignee}</span>
               </div>
               <div class="flex flex-col gap-2">
                 <span class="text-slate-400 text-sm">Priority:</span>
                 <span
-                  class="${getPriority(fetchIssue[i].priority)} text-white text-[10px] px-3 py-1 rounded-full font-bold w-fit uppercase"
-                  >${fetchIssue[i].priority}</span
+                  class="${getPriority(issue.priority)} text-white text-[10px] px-3 py-1 rounded-full font-bold w-fit uppercase"
+                  >${issue.priority}</span
                 >
               </div>
             </div>
-
-            <button
+ 
+            <button id="close-btn" onclick="closeIndividual()"
               class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3 px-8 rounded-lg transition-colors"
             >
               Close
             </button>
           </div>
         </div>
-      </div>`;
-    });
-  }
+      </div>`
+      }
+    }
+    document.getElementById('focused-issue').classList.remove('hidden');
+  })
+}
+
+function closeIndividual() {
+  document.getElementById("focused-issue").classList.add("hidden");
+}
+
+
+
+
+
+
+
+// search 
+
+
+const searchValue = document.getElementById('search');
+
+
+function search(issues){
+  searchValue.addEventListener('input', (event) => {
+    const lookingFor = event.target.value;
+
+})
 }
