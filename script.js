@@ -1,3 +1,5 @@
+let globalIssues = [];
+
 // sign in
 
 const signInButton = document.getElementById("sign-in-button");
@@ -166,13 +168,13 @@ function getLabels(labels) {
 // show individual issue
 
 function showIndividual(issues) {
-  let temp = document.querySelectorAll('#focused-issue>div');
-  document.getElementById('issues').addEventListener('click', (event) => {
+  let temp = document.querySelectorAll("#focused-issue>div");
+  document.getElementById("issues").addEventListener("click", (event) => {
     const parent = event.target.parentElement.parentElement;
-    
-    for(let issue of issues){
-      if(issue.title === parent.querySelector('h2').innerText){
-        document.getElementById('focused-issue').innerHTML = `<div 
+
+    for (let issue of issues) {
+      if (issue.title === parent.querySelector("h2").innerText) {
+        document.getElementById("focused-issue").innerHTML = `<div 
         class="flex items-center justify-center min-h-screen bg-gray-500 bg-opacity-80 p-6 fixed z-50 inset-0"
       >
         <div
@@ -231,32 +233,66 @@ function showIndividual(issues) {
             </button>
           </div>
         </div>
-      </div>`
+      </div>`;
       }
     }
-    document.getElementById('focused-issue').classList.remove('hidden');
-  })
+    document.getElementById("focused-issue").classList.remove("hidden");
+  });
 }
 
 function closeIndividual() {
   document.getElementById("focused-issue").classList.add("hidden");
 }
 
+// search
 
+const searchValue = document.getElementById("search");
 
+function search(issues) {
+  searchValue.oninput = (event) => {
+    const lookingFor = event.target.value.toLowerCase();
+    const issueContainer = document.getElementById("issues");
 
+    const keywords = lookingFor.split(" ").filter((w) => w !== "");
 
+    issueContainer.innerHTML = "";
+    let count = 0;
 
+    for (let issue of issues) {
+      const isMatch = keywords.every((word) =>
+        issue.title.toLowerCase().includes(word),
+      );
 
-// search 
+      if (isMatch) {
+        count++;
 
+        issueContainer.innerHTML += `
+          <div class="issues flex flex-col w-[250px] border-t-[5px] ${
+            issue.status === "open"
+              ? "border-t-emerald-500"
+              : "border-t-violet-500"
+          } border border-gray-200 rounded-xl shadow-sm bg-white overflow-hidden h-[320px]">
+            <div class="p-5 flex-1">
+              <div class="flex justify-between items-start mb-4">
+                <div class="shrink-0">
+                  <img class="w-8 h-8 rounded-full p-1 object-contain" src="./assets/${issue.status === "open" ? "open" : "closed"}.png" alt="Status" />
+                </div>
+                <span class="${getPriority(issue.priority)} text-[10px] font-bold px-3 py-1 rounded-full uppercase tracking-wide">
+                  ${issue.priority}
+                </span>
+              </div>
+              <h2 class="text-base font-bold text-slate-800 leading-tight mb-2">${issue.title}</h2>
+              <p class="text-slate-500 text-sm mb-4 leading-relaxed line-clamp-3">${issue.description}</p>
+              <div class="flex flex-wrap gap-2">${getLabels(issue.labels)}</div>
+            </div>
+            <div class="border-t border-gray-100 p-4 bg-slate-50/50">
+              <p class="text-slate-500 text-xs font-medium">#${issue.id} by ${issue.author}</p>
+              <p class="text-slate-400 text-[11px]">${issue.createdAt.split("T")[0]}</p>
+            </div>
+          </div>`;
+      }
+    }
 
-const searchValue = document.getElementById('search');
-
-
-function search(issues){
-  searchValue.addEventListener('input', (event) => {
-    const lookingFor = event.target.value;
-
-})
+    document.getElementById("total-count").innerText = count;
+  };
 }
