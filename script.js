@@ -4,6 +4,7 @@ const signInButton = document.getElementById("sign-in-button");
 const loginPage = document.getElementById("login-page");
 const mainPage = document.getElementById("main-page");
 
+let currentTab = "All";
 signInButton.addEventListener("click", () => {
   const username = document.getElementById("username").value;
   const pass = document.getElementById("pass").value;
@@ -34,24 +35,22 @@ tabs.forEach((tab) => {
 });
 
 
-
 // tab switching
-function showCurrentTab(tab){
-  tabs.forEach(t => {
-    t.setAttribute('status', 'inactive');
-  })
-  tab.setAttribute('status', 'active')
+function showCurrentTab(tab) {
+  tabs.forEach((t) => {
+    t.setAttribute("status", "inactive");
+  });
+  tab.setAttribute("status", "active");
+  currentTab = tab.innerText;
+  loadIssues();
 }
-
-
-
 
 // load cards by the type
 
-const loader = document.getElementById('loader');
+const loader = document.getElementById("loader");
 
 const loadIssues = () => {
-  loader.classList.remove('hidden');
+  loader.classList.remove("hidden");
 
   fetch("https://phi-lab-server.vercel.app/api/v1/lab/issues")
     .then((res) => res.json())
@@ -62,18 +61,11 @@ const loadIssues = () => {
       console.error("Error fetching issues:", err);
     })
     .finally(() => {
-      loader.classList.add('hidden');
+      loader.classList.add("hidden");
     });
 };
 
 loadIssues();
-
-
-
-
-
-
-
 
 const displayIssues = (issues) => {
   count = 0;
@@ -81,15 +73,17 @@ const displayIssues = (issues) => {
   const issueContainer = document.getElementById("issues");
   issueContainer.innerHTML = "";
 
-  // check which tab to show
-  const currentTab = tabs.forEach(tab => {
-    if(tab.getAttribute('status') === 'active')
-      return console.log(tab.innerText);
-  })
+
 
   // get into every issues
   for (let issue of issues) {
-    if(currentTab = )
+    console.log(currentTab, " ", issue.status);
+    if (currentTab === "Open" && issue.status != "open") {
+      continue;
+    } else if (currentTab === "Closed" && issue.status != "closed") {
+      continue;
+    }
+
     count++;
     // create element
     const newCard = document.createElement("div");
@@ -144,7 +138,6 @@ const displayIssues = (issues) => {
   }
 };
 
-
 function getPriority(x) {
   if (x === "high") return "bg-[#feecec] text-[#ef4444]";
   else if (x === "medium") return `bg-[#fff6d1] text-[#f59e0b]`;
@@ -174,8 +167,5 @@ function getLabels(labels) {
   });
   return allLabels;
 }
-
-
-
 
 // show individual issue
