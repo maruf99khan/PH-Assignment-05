@@ -29,32 +29,73 @@ tabs.forEach((tab) => {
 
     tab.classList.remove("text-black");
     tab.classList.add("bg-[#4A00FF]", "text-white");
+    showCurrentTab(tab);
   });
 });
 
-// load cards
+
+
+// tab switching
+function showCurrentTab(tab){
+  tabs.forEach(t => {
+    t.setAttribute('status', 'inactive');
+  })
+  tab.setAttribute('status', 'active')
+}
+
+
+
+
+// load cards by the type
+
+const loader = document.getElementById('loader');
 
 const loadIssues = () => {
+  loader.classList.remove('hidden');
+
   fetch("https://phi-lab-server.vercel.app/api/v1/lab/issues")
     .then((res) => res.json())
-    .then((json) => displayIssues(json.data));
-
-
+    .then((json) => {
+      displayIssues(json.data);
+    })
+    .catch((err) => {
+      console.error("Error fetching issues:", err);
+    })
+    .finally(() => {
+      loader.classList.add('hidden');
+    });
 };
 
+loadIssues();
+
+
+
+
+
+
+
+
 const displayIssues = (issues) => {
-    count = 0;
+  count = 0;
   // get the container
   const issueContainer = document.getElementById("issues");
   issueContainer.innerHTML = "";
+
+  // check which tab to show
+  const currentTab = tabs.forEach(tab => {
+    if(tab.getAttribute('status') === 'active')
+      return console.log(tab.innerText);
+  })
+
   // get into every issues
   for (let issue of issues) {
+    if(currentTab = )
     count++;
     // create element
     const newCard = document.createElement("div");
     newCard.innerHTML = `
         <div
-        class="flex flex-col w-[250px] border-t-[5px] ${
+        class="issue-card flex flex-col w-[250px] border-t-[5px] ${
           issue.status === "open"
             ? "border-t-emerald-500"
             : "border-t-violet-500"
@@ -99,45 +140,42 @@ const displayIssues = (issues) => {
 
     // add to the parent
     issueContainer.append(newCard);
-    document.getElementById('total-count').innerText = count;
+    document.getElementById("total-count").innerText = count;
   }
 };
 
-loadIssues();
 
-
-
-
-function getPriority(x){
-    if(x === "high")
-        return "bg-[#feecec] text-[#ef4444]";
-    else if(x === 'medium')
-        return `bg-[#fff6d1] text-[#f59e0b]`;
-    else return `bg-[#eeeff2] text-[#9ca3af]`;
+function getPriority(x) {
+  if (x === "high") return "bg-[#feecec] text-[#ef4444]";
+  else if (x === "medium") return `bg-[#fff6d1] text-[#f59e0b]`;
+  else return `bg-[#eeeff2] text-[#9ca3af]`;
 }
-
-
 
 function getLabelStyles(label) {
-    //convert to lowercase to make sure it matches even if the data 
-    const type = label.toLowerCase();
+  //convert to lowercase to make sure it matches even if the data
+  const type = label.toLowerCase();
 
-    const styles = {
-        "bug": "bg-red-50 text-red-500 border-red-200",
-        "help wanted": "bg-amber-50 text-amber-600 border-amber-200",
-        "enhancement": "bg-blue-50 text-blue-600 border-blue-200",
-        "good first issue": "bg-emerald-50 text-emerald-600 border-emerald-200",
-        "documentation": "bg-slate-100 text-slate-600 border-slate-300"
-    };
-    return styles[type];
+  const styles = {
+    bug: "bg-red-50 text-red-500 border-red-200",
+    "help wanted": "bg-amber-50 text-amber-600 border-amber-200",
+    enhancement: "bg-blue-50 text-blue-600 border-blue-200",
+    "good first issue": "bg-emerald-50 text-emerald-600 border-emerald-200",
+    documentation: "bg-slate-100 text-slate-600 border-slate-300",
+  };
+  return styles[type];
 }
 
-function getLabels(labels){
-    let allLabels = ``;
-    labels.forEach(label => {
-        allLabels += `<span
+function getLabels(labels) {
+  let allLabels = ``;
+  labels.forEach((label) => {
+    allLabels += `<span
               class="flex items-center gap-1.5 ${getLabelStyles(label)} text-[10px] font-semibold px-2.5 py-1 rounded-full"
-            >${label}</span>`
-    })
-    return allLabels;
+            >${label}</span>`;
+  });
+  return allLabels;
 }
+
+
+
+
+// show individual issue
