@@ -35,23 +35,21 @@ tabs.forEach((tab) => {
 // load cards
 
 const loadIssues = () => {
-    let allData = {};
   fetch("https://phi-lab-server.vercel.app/api/v1/lab/issues")
     .then((res) => res.json())
-    .then((json) => {
-        displayIssues(json.data);
-        allData = json.data;
-    });
+    .then((json) => displayIssues(json.data));
 
-    console.log(allData)
+
 };
 
 const displayIssues = (issues) => {
+    count = 0;
   // get the container
   const issueContainer = document.getElementById("issues");
   issueContainer.innerHTML = "";
   // get into every issues
   for (let issue of issues) {
+    count++;
     // create element
     const newCard = document.createElement("div");
     newCard.innerHTML = `
@@ -93,14 +91,15 @@ const displayIssues = (issues) => {
         </div>
 
         <div class="border-t border-gray-100 p-4 bg-slate-50/50">
-          <p class="text-slate-500 text-xs font-medium">#1 by john_doe</p>
-          <p class="text-slate-400 text-[11px]">1/15/2024</p>
+          <p class="text-slate-500 text-xs font-medium">#${issue.id} by ${issue.author}</p>
+          <p class="text-slate-400 text-[11px]">${issue.createdAt}</p>
         </div>
       </div>
         `;
 
     // add to the parent
     issueContainer.append(newCard);
+    document.getElementById('total-count').innerText = count;
   }
 };
 
