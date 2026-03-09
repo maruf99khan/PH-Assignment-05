@@ -1,0 +1,349 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>GitHub Issues Tracker</title>
+
+    <!-- Tailwind + DaisyUI -->
+    <link
+      href="https://cdn.jsdelivr.net/npm/daisyui@4.10.2/dist/full.min.css"
+      rel="stylesheet"
+    />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="style.css" />
+    <!-- Font Awesome -->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
+    />
+
+    <!-- google fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Audiowide&family=Geist:wght@100..900&family=Hind+Siliguri:wght@300;400;500;600;700&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body class="bg-[#F8FAFC] min-h-screen">
+    <section id="login-page" class="flex justify-center mx-auto py-16 hidden">
+      <div class="bg-white w-[420px] rounded-xl shadow-md p-8 text-center">
+        <!-- GitHub Icon -->
+        <div class="flex justify-center">
+          <img src="./assets/github-logo.png" alt="" />
+        </div>
+
+        <!-- Title -->
+        <h2 class="text-lg font-semibold text-gray-800">
+          GitHub Issues Tracker
+        </h2>
+        <p class="text-gray-500 text-xs mb-6">Sign in to manage your issues</p>
+
+        <!-- Username -->
+        <div class="text-left mb-3">
+          <label class="text-sm text-gray-700">Username</label>
+          <input
+            id="username"
+            type="text"
+            placeholder="Enter Username"
+            class="input input-bordered w-full h-10 mt-1 bg-white"
+          />
+          <p class="text-purple-600 text-xs mt-1">Default: admin</p>
+        </div>
+
+        <!-- Password -->
+        <div class="text-left mb-4">
+          <label class="text-sm text-gray-700">Password</label>
+          <input
+            id="pass"
+            type="password"
+            placeholder="Enter Password"
+            class="input input-bordered w-full h-10 mt-1 bg-white"
+          />
+          <p class="text-purple-600 text-xs mt-1">Default: admin123</p>
+        </div>
+
+        <!-- Sign In Button -->
+        <button
+          id="sign-in-button"
+          class="w-full py-2 text-white text-sm font-medium rounded-md bg-gradient-to-r from-purple-600 to-indigo-600 hover:opacity-95"
+        >
+          Sign In
+        </button>
+
+        <!-- Divider -->
+        <div class="flex items-center my-5">
+          <div class="flex-grow border-t border-gray-300"></div>
+          <span class="mx-3 text-gray-400 text-xs">OR</span>
+          <div class="flex-grow border-t border-gray-300"></div>
+        </div>
+
+        <!-- Demo Credentials -->
+        <div class="bg-gray-100 rounded-lg p-4 text-sm text-gray-700">
+          <p class="text-gray-500 text-xs mb-2">Demo Credentials:</p>
+          <p><span class="font-semibold">Username:</span> admin</p>
+          <p><span class="font-semibold">Password:</span> admin123</p>
+        </div>
+      </div>
+    </section>
+
+    <section
+      class="main-page flex justify-between px-[20px] sm:px-[100px] py-2 sm:py-6 mb-8"
+    >
+      <div class="flex justify-around gap-3 items-center">
+        <i class="fa-brands fa-github text-3xl"></i>
+        <h1 class="font-semibold">GitHub Issues Tracker</h1>
+      </div>
+
+      <div class="relative flex justify-between gap-3">
+        <i
+          class="fa-solid fa-magnifying-glass absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"
+        ></i>
+
+        <input
+          type="text"
+          placeholder="Search issues..."
+          class="w-auto pl-10 pr-4 py-3 bg-white border rounded-lg outline-none"
+        />
+        <button class="text-white bg-[#4A00FF] p-3 rounded-md">
+          <i class="fa-solid fa-plus bg-transparent mr-1"></i>
+          New Issue
+        </button>
+      </div>
+    </section>
+
+    <section
+      id="tabs"
+      class="mx-5 sm:mx-[240px] h-auto flex justify-start gap-7 rounded-lg p-4 shadow-md mb-4"
+    >
+      <button
+        class="buttons border-2 rounded-md py-2 px-8 bg-[#4A00FF] text-white"
+      >
+        All
+      </button>
+      <button class="buttons border-2 rounded-md py-2 px-6">Open</button>
+      <button class="buttons border-2 rounded-md py-2 px-6">Closed</button>
+    </section>
+
+    <section
+      class="mx-5 sm:mx-[240px] h-auto gap-7 rounded-t-lg p-4 shadow-md flex justify-between"
+    >
+      <div class="flex justify-center gap-3 items-center">
+        <img class="h-11 w-11 text-center" src="./assets/Aperture.png" alt="" />
+        <div>
+          <h1 class="text-[20px] font-semibold"><span id="total-count">0</span> Issues</h1>
+          <p class="text-gray-500 text-[12px]">
+            Track and manage your project issues
+          </p>
+        </div>
+      </div>
+      <div class="flex justify-between gap-3 items-center text-center">
+        <div class="rounded-full bg-green-600 h-4 w-4"></div>
+        <div>Open</div>
+        <div class="rounded-full bg-violet-600 h-4 w-4"></div>
+        <div>Closed</div>
+      </div>
+    </section>
+
+    <section
+      id="issues"
+      class="mx-5 sm:mx-[240px] h-auto gap-2 rounded-b-lg p-4 shadow-md bg-[#F8FAFC] grid grid-cols-2 sm:grid-cols-4"
+    >
+      <div
+        class="flex flex-col w-full border-t-[5px] border-t-emerald-500 border border-gray-200 rounded-xl shadow-sm bg-white overflow-hidden"
+      >
+        <div class="p-5 flex-1">
+          <div class="flex justify-between items-start mb-4">
+            <div class="shrink-0">
+              <img
+                class="w-8 h-8 rounded-full bg-green-100 p-1 object-contain"
+                src="./assets/open.png"
+                alt="Status"
+              />
+            </div>
+
+            <span
+              class="bg-red-50 text-red-500 text-[10px] font-bold px-3 py-1 rounded-full uppercase tracking-wide"
+            >
+              High
+            </span>
+          </div>
+
+          <h2 class="text-base font-bold text-slate-800 leading-tight mb-2">
+            Fix Navigation Menu On Mobile Devices
+          </h2>
+
+          <p class="text-slate-500 text-sm mb-4 leading-relaxed line-clamp-3">
+            The navigation menu doesn't collapse properly on mobile devices...
+          </p>
+
+          <div class="flex flex-wrap gap-2">
+            <span
+              class="flex items-center gap-1.5 bg-red-50 text-red-500 border border-red-200 text-[10px] font-semibold px-2.5 py-1 rounded-full"
+            >
+              BUG
+            </span>
+
+            <span
+              class="flex items-center gap-1.5 bg-amber-50 text-amber-600 border border-amber-200 text-[10px] font-semibold px-2.5 py-1 rounded-full"
+            >
+              HELP WANTED
+            </span>
+          </div>
+        </div>
+
+        <div class="border-t border-gray-100 p-4 bg-slate-50/50">
+          <p class="text-slate-500 text-xs font-medium">#1 by john_doe</p>
+          <p class="text-slate-400 text-[11px]">1/15/2024</p>
+        </div>
+      </div>
+      <div
+        class="flex flex-col w-full max-w-[320px] border-t-[5px] border-t-emerald-500 border border-gray-200 rounded-xl shadow-sm bg-white overflow-hidden"
+      >
+        <div class="p-5 flex-1">
+          <div class="flex justify-between items-start mb-4">
+            <div class="shrink-0">
+              <img
+                class="w-8 h-8 rounded-full bg-green-100 p-1 object-contain"
+                src="./assets/open.png"
+                alt="Status"
+              />
+            </div>
+
+            <span
+              class="bg-red-50 text-red-500 text-[10px] font-bold px-3 py-1 rounded-full uppercase tracking-wide"
+            >
+              High
+            </span>
+          </div>
+
+          <h2 class="text-base font-bold text-slate-800 leading-tight mb-2">
+            Fix Navigation Menu On Mobile Devices
+          </h2>
+
+          <p class="text-slate-500 text-sm mb-4 leading-relaxed line-clamp-3">
+            The navigation menu doesn't collapse properly on mobile devices...
+          </p>
+
+          <div class="flex flex-wrap gap-2">
+            <span
+              class="flex items-center gap-1.5 bg-red-50 text-red-500 border border-red-200 text-[10px] font-semibold px-2.5 py-1 rounded-full"
+            >
+              BUG
+            </span>
+
+            <span
+              class="flex items-center gap-1.5 bg-amber-50 text-amber-600 border border-amber-200 text-[10px] font-semibold px-2.5 py-1 rounded-full"
+            >
+              HELP WANTED
+            </span>
+          </div>
+        </div>
+
+        <div class="border-t border-gray-100 p-4 bg-slate-50/50">
+          <p class="text-slate-500 text-xs font-medium">#1 by john_doe</p>
+          <p class="text-slate-400 text-[11px]">1/15/2024</p>
+        </div>
+      </div>
+      <div
+        class="flex flex-col w-full max-w-[320px] border-t-[5px] border-t-emerald-500 border border-gray-200 rounded-xl shadow-sm bg-white overflow-hidden"
+      >
+        <div class="p-5 flex-1">
+          <div class="flex justify-between items-start mb-4">
+            <div class="shrink-0">
+              <img
+                class="w-8 h-8 rounded-full bg-green-100 p-1 object-contain"
+                src="./assets/open.png"
+                alt="Status"
+              />
+            </div>
+
+            <span
+              class="bg-red-50 text-red-500 text-[10px] font-bold px-3 py-1 rounded-full uppercase tracking-wide"
+            >
+              High
+            </span>
+          </div>
+
+          <h2 class="text-base font-bold text-slate-800 leading-tight mb-2">
+            Fix Navigation Menu On Mobile Devices
+          </h2>
+
+          <p class="text-slate-500 text-sm mb-4 leading-relaxed line-clamp-3">
+            The navigation menu doesn't collapse properly on mobile devices...
+          </p>
+
+          <div class="flex flex-wrap gap-2">
+            <span
+              class="flex items-center gap-1.5 bg-red-50 text-red-500 border border-red-200 text-[10px] font-semibold px-2.5 py-1 rounded-full"
+            >
+              BUG
+            </span>
+
+            <span
+              class="flex items-center gap-1.5 bg-amber-50 text-amber-600 border border-amber-200 text-[10px] font-semibold px-2.5 py-1 rounded-full"
+            >
+              HELP WANTED
+            </span>
+          </div>
+        </div>
+
+        <div class="border-t border-gray-100 p-4 bg-slate-50/50">
+          <p class="text-slate-500 text-xs font-medium">#1 by john_doe</p>
+          <p class="text-slate-400 text-[11px]">1/15/2024</p>
+        </div>
+      </div>
+      <div
+        class="flex flex-col w-full max-w-[320px] border-t-[5px] border-t-emerald-500 border border-gray-200 rounded-xl shadow-sm bg-white overflow-hidden"
+      >
+        <div class="p-5 flex-1">
+          <div class="flex justify-between items-start mb-4">
+            <div class="shrink-0">
+              <img
+                class="w-8 h-8 rounded-full bg-green-100 p-1 object-contain"
+                src="./assets/open.png"
+                alt="Status"
+              />
+            </div>
+
+            <span
+              class="bg-red-50 text-red-500 text-[10px] font-bold px-3 py-1 rounded-full uppercase tracking-wide"
+            >
+              High
+            </span>
+          </div>
+
+          <h2 class="text-base font-bold text-slate-800 leading-tight mb-2">
+            Fix Navigation Menu On Mobile Devices
+          </h2>
+
+          <p class="text-slate-500 text-sm mb-4 leading-relaxed line-clamp-3">
+            The navigation menu doesn't collapse properly on mobile devices...
+          </p>
+
+          <div class="flex flex-wrap gap-2">
+            <span
+              class="flex items-center gap-1.5 bg-red-50 text-red-500 border border-red-200 text-[10px] font-semibold px-2.5 py-1 rounded-full"
+            >
+              BUG
+            </span>
+
+            <span
+              class="flex items-center gap-1.5 bg-amber-50 text-amber-600 border border-amber-200 text-[10px] font-semibold px-2.5 py-1 rounded-full"
+            >
+              HELP WANTED
+            </span>
+          </div>
+        </div>
+
+        <div class="border-t border-gray-100 p-4 bg-slate-50/50">
+          <p class="text-slate-500 text-xs font-medium">#1 by john_doe</p>
+          <p class="text-slate-400 text-[11px]">1/15/2024</p>
+        </div>
+      </div>
+    </section>
+
+    <script src="script.js"></script>
+  </body>
+</html>
