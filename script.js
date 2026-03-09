@@ -34,7 +34,6 @@ tabs.forEach((tab) => {
   });
 });
 
-
 // tab switching
 function showCurrentTab(tab) {
   tabs.forEach((t) => {
@@ -49,20 +48,21 @@ function showCurrentTab(tab) {
 
 const loader = document.getElementById("loader");
 
-const loadIssues = () => {
+const loadIssues = async () => {
   loader.classList.remove("hidden");
 
-  fetch("https://phi-lab-server.vercel.app/api/v1/lab/issues")
-    .then((res) => res.json())
-    .then((json) => {
-      displayIssues(json.data);
-    })
-    .catch((err) => {
-      console.error("Error fetching issues:", err);
-    })
-    .finally(() => {
-      loader.classList.add("hidden");
-    });
+  try {
+    const response = await fetch(
+      "https://phi-lab-server.vercel.app/api/v1/lab/issues",
+    );
+    const json = await response.json();
+
+    displayIssues(json.data);
+  } catch (err) {
+    console.error("Error fetching issues:", err);
+  } finally {
+    loader.classList.add("hidden");
+  }
 };
 
 loadIssues();
@@ -73,11 +73,9 @@ const displayIssues = (issues) => {
   const issueContainer = document.getElementById("issues");
   issueContainer.innerHTML = "";
 
-
-
   // get into every issues
   for (let issue of issues) {
-    console.log(currentTab, " ", issue.status);
+    // console.log(currentTab, " ", issue.status);
     if (currentTab === "Open" && issue.status != "open") {
       continue;
     } else if (currentTab === "Closed" && issue.status != "closed") {
@@ -85,11 +83,9 @@ const displayIssues = (issues) => {
     }
 
     count++;
-    // create element
-    const newCard = document.createElement("div");
-    newCard.innerHTML = `
+    issueContainer.innerHTML += `
         <div
-        class="issue-card flex flex-col w-[250px] border-t-[5px] ${
+        class="issues flex flex-col w-[250px] border-t-[5px] ${
           issue.status === "open"
             ? "border-t-emerald-500"
             : "border-t-violet-500"
@@ -127,15 +123,13 @@ const displayIssues = (issues) => {
 
         <div class="border-t border-gray-100 p-4 bg-slate-50/50">
           <p class="text-slate-500 text-xs font-medium">#${issue.id} by ${issue.author}</p>
-          <p class="text-slate-400 text-[11px]">${issue.createdAt}</p>
+          <p class="text-slate-400 text-[11px]">${issue.createdAt.split('T')[0]}</p>
         </div>
       </div>
         `;
-
-    // add to the parent
-    issueContainer.append(newCard);
-    document.getElementById("total-count").innerText = count;
   }
+  document.getElementById("total-count").innerText = count;
+  showIndividual(issues);
 };
 
 function getPriority(x) {
@@ -169,3 +163,77 @@ function getLabels(labels) {
 }
 
 // show individual issue
+
+function showIndividual(issues) {
+  const fetchIssue = [...issues];
+  const allIssues = document.querySelectorAll(".issues");
+
+  for (let i = 0; i < 50; i++) {
+    allIssues[i].addEventListener("click", () => {
+      document.getElementById("focused-issue").classList.remove("hidden");
+      document.getElementById("focused-issue").innerHTML = "";
+      document.getElementById("focused-issue").innerHTML = `<div 
+        class="flex items-center justify-center min-h-screen bg-gray-500 bg-opacity-80 p-6 fixed z-50 inset-0"
+      >
+        <div
+          class="max-w-3xl w-full bg-white rounded-xl shadow-lg p-8 flex flex-col gap-5"
+        >
+          <div>
+            <h1 class="text-3xl font-bold text-slate-900">
+              ${fetchIssue[i].title}
+            </h1>
+            <div class="flex items-center gap-2 mt-2 text-slate-500 text-sm">
+              <span
+                class="${
+                  fetchIssue[i].status === "open"
+                    ? "bg-emerald-500"
+                    : "bg-violet-500"
+                } text-white px-3 py-1 rounded-full font-semibold flex items-center gap-1.5"
+              >
+                ${fetchIssue[i].status}
+              </span>
+              <span>•</span>
+              <span>Opened by ${fetchIssue[i].author}</span>
+              <span>•</span>
+              <span>${fetchIssue[i].createdAt.split('T')[0]}</span>
+            </div>
+          </div>
+
+          <div class="flex gap-2">
+            ${getLabels(fetchIssue[i].labels)}
+          </div>
+
+          <p class="text-slate-600 leading-relaxed text-lg">
+            ${fetchIssue[i].description}
+          </p>
+
+          <div
+            class="flex flex-col sm:flex-row justify-between items-end gap-4 mt-2"
+          >
+            <div
+              class="grid grid-cols-2 gap-8  p-5 rounded-xl flex-grow w-full sm:w-auto"
+            >
+              <div class="flex flex-col gap-1">
+                <span class="text-slate-400 text-sm">Assignee:</span>
+                <span class="font-bold text-slate-800">${fetchIssue[i].assignee === ""? 'none' : fetchIssue[i].assignee}</span>
+              </div>
+              <div class="flex flex-col gap-2">
+                <span class="text-slate-400 text-sm">Priority:</span>
+                <span
+                  class="${getPriority(fetchIssue[i].priority)} text-white text-[10px] px-3 py-1 rounded-full font-bold w-fit uppercase"
+                  >${fetchIssue[i].priority}</span
+                >
+              </div>
+            </div>
+
+            <button
+              class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3 px-8 rounded-lg transition-colors"
+            >
+              Close
+            </button>
+          </div>
+        </div>
+      </div>`;
+    });
+  }
+}
